@@ -297,8 +297,20 @@ p { margin: 0 0 var(--space-2); }
   color: var(--navy);
   background: transparent;
 }
+.nav .nav__hamburger svg { width: 26px; height: 26px; }
+.nav .nav__hamburger svg path { stroke-width: 2.25; }
 @media (min-width: 1024px) {
   .nav .nav__hamburger { display: none; }
+}
+
+/* Stronger contrast for the hamburger over the dark hero — cream lines
+   plus a subtle drop-shadow so it reads even against light areas of
+   the photograph. */
+.nav.nav--over-hero .nav__hamburger {
+  color: var(--cream-paper);
+}
+.nav.nav--over-hero .nav__hamburger svg {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45));
 }
 .nav__hamburger svg { width: 24px; height: 24px; }
 
@@ -445,10 +457,12 @@ p { margin: 0 0 var(--space-2); }
 .link-mint:hover::after { transform: translateX(3px); }
 
 /* --------------------------------------------------------------------------
-   7. Hero — full-bleed background photograph
+   7. Hero — full-viewport background photograph
    The hero is pulled up under the sticky nav (negative margin) so the
    photograph reads continuously from the top of the viewport. The nav
    sits transparent over it, then turns solid cream once scrolled past.
+   Inside, a flex-column container distributes content: a stats /
+   editorial nugget at the top under the nav, the main copy at the bottom.
    -------------------------------------------------------------------------- */
 .hero {
   position: relative;
@@ -456,17 +470,22 @@ p { margin: 0 0 var(--space-2); }
   overflow: hidden;
   color: var(--cream-paper);
   display: flex;
-  align-items: flex-end;
-  min-height: 600px;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
   margin-top: calc(-1 * var(--nav-height));
-  padding: calc(var(--nav-height) + var(--space-8)) 0 var(--space-6);
+  padding: calc(var(--nav-height) + var(--space-3)) 0 var(--space-6);
 }
 @media (min-width: 768px) {
   .hero {
-    min-height: clamp(640px, 80vh, 820px);
-    align-items: center;
-    padding: calc(var(--nav-height) + var(--space-12)) 0 var(--space-12);
+    padding: calc(var(--nav-height) + var(--space-6)) 0 var(--space-8);
   }
+}
+
+.hero > .container {
+  display: flex;
+  flex: 1;
+  width: 100%;
 }
 
 /* Background photograph */
@@ -515,39 +534,60 @@ p { margin: 0 0 var(--space-2); }
 }
 
 .hero__copy {
-  max-width: 620px;
   position: relative;
   z-index: 1;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-4);
 }
 
 .hero .eyebrow {
   color: #9ED2BC;
+  font-size: 13px;
+  letter-spacing: 0.18em;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  margin: 0;
+  position: relative;
+  padding-left: 28px;
+}
+.hero .eyebrow::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 18px;
+  height: 1.5px;
+  background: var(--mint);
+  transform: translateY(-50%);
 }
 
 .hero__headline {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(40px, 8.4vw, 96px);
-  line-height: 1.02;
-  letter-spacing: -0.025em;
+  font-size: clamp(56px, 14vw, 168px);
+  line-height: 0.96;
+  letter-spacing: -0.035em;
   color: var(--cream-paper);
-  margin: var(--space-2) 0 var(--space-3);
+  margin: 0;
+  max-width: 1040px;
   font-variation-settings: "opsz" 144;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 
   /* Stack rotating phrases in the same cell so the height auto-fits the
      longest one and there is no layout shift between rotations. */
   display: grid;
   grid-template-columns: 1fr;
-  min-height: 1.04em;
+  min-height: 1em;
 }
 
 .hero__phrase {
   grid-column: 1;
   grid-row: 1;
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(12px);
   transition: opacity 600ms var(--ease), transform 600ms var(--ease);
   pointer-events: none;
 }
@@ -563,13 +603,24 @@ p { margin: 0 0 var(--space-2); }
 
 .hero__sub {
   font-size: 17px;
-  line-height: 1.6;
-  color: rgba(250, 247, 241, 0.92);
-  max-width: 520px;
-  margin: 0 0 var(--space-4);
+  line-height: 1.55;
+  color: rgba(250, 247, 241, 0.88);
+  max-width: 540px;
+  margin: 0;
+  padding-left: 28px;
+  border-left: 1.5px solid rgba(159, 210, 188, 0.5);
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  align-self: flex-start;
 }
-@media (min-width: 768px) { .hero__sub { font-size: 18px; } }
+@media (min-width: 768px) {
+  .hero__sub {
+    font-size: 19px;
+    line-height: 1.5;
+    max-width: 580px;
+    padding-left: 32px;
+    align-self: flex-end;
+  }
+}
 
 .hero__buttons {
   display: flex;
