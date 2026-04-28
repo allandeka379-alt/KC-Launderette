@@ -426,28 +426,34 @@ p { margin: 0 0 var(--space-2); }
    7. Hero
    -------------------------------------------------------------------------- */
 .hero {
-  padding: var(--space-8) 0 var(--space-12);
+  padding: var(--space-6) 0 var(--space-8);
   position: relative;
 }
 @media (min-width: 768px) {
+  .hero { padding: var(--space-8) 0 var(--space-12); }
+}
+@media (min-width: 1024px) {
   .hero { padding: var(--space-12) 0 var(--space-16); }
 }
 
 .hero__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-6);
+  gap: var(--space-4);
   align-items: center;
 }
+@media (min-width: 768px) {
+  .hero__grid { gap: var(--space-6); }
+}
 @media (min-width: 1024px) {
-  .hero__grid { grid-template-columns: 60% 40%; gap: var(--space-8); }
+  .hero__grid { grid-template-columns: 56% 44%; gap: var(--space-8); }
 }
 
 .hero__copy { max-width: 640px; }
 .hero__headline {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(48px, 8vw, 96px);
+  font-size: clamp(40px, 9vw, 96px);
   line-height: 1.02;
   letter-spacing: -0.025em;
   color: var(--navy);
@@ -455,20 +461,169 @@ p { margin: 0 0 var(--space-2); }
   font-variation-settings: "opsz" 144;
 }
 .hero__sub {
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1.6;
   color: var(--ink-soft);
   max-width: 520px;
   margin: 0 0 var(--space-4);
 }
-.hero__buttons { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+@media (min-width: 768px) { .hero__sub { font-size: 18px; } }
+
+.hero__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.hero__buttons .btn { flex: 1 1 auto; min-width: 0; }
+@media (min-width: 480px) {
+  .hero__buttons .btn { flex: 0 1 auto; }
+}
 
 .hero__art {
   position: relative;
   aspect-ratio: 4 / 5;
-  border-radius: 4px;
+  border-radius: 8px;
   overflow: hidden;
   background: var(--cream-deep);
+  box-shadow: 0 24px 60px -20px rgba(14, 31, 44, 0.25);
+}
+@media (max-width: 767px) {
+  .hero__art { aspect-ratio: 4 / 3; }
+}
+
+/* --------------------------------------------------------------------------
+   7b. Carousel
+   -------------------------------------------------------------------------- */
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--cream-deep);
+  touch-action: pan-y;
+}
+
+.carousel__track {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  transition: transform 600ms var(--ease);
+  will-change: transform;
+}
+
+.carousel__slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.carousel__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.92) brightness(0.97);
+}
+
+/* Soft gradient overlay for legibility of caption/credit */
+.carousel__slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(14, 31, 44, 0) 55%,
+    rgba(14, 31, 44, 0.55) 100%
+  );
+}
+
+.carousel__caption {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  right: 64px;
+  z-index: 2;
+  color: var(--cream-paper);
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+@media (min-width: 768px) {
+  .carousel__caption { left: 24px; bottom: 24px; right: 80px; font-size: 13px; }
+}
+
+.carousel__credit {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2;
+  color: rgba(250, 247, 241, 0.72);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: rgba(14, 31, 44, 0.35);
+  padding: 4px 8px;
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+}
+.carousel__credit:hover { color: #fff; background: rgba(14, 31, 44, 0.55); }
+
+/* Dots */
+.carousel__dots {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(14, 31, 44, 0.18);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  z-index: 3;
+}
+.carousel__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: background var(--transition-fast), width var(--transition-fast);
+}
+.carousel__dot[aria-selected="true"] {
+  background: var(--cream-paper);
+  width: 24px;
+}
+.carousel__dot:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+
+/* Prev / next — desktop only */
+.carousel__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: rgba(250, 247, 241, 0.85);
+  color: var(--navy);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.carousel__nav:hover { background: var(--cream-paper); transform: translateY(-50%) scale(1.05); }
+.carousel__nav--prev { left: 12px; }
+.carousel__nav--next { right: 12px; }
+.carousel__nav svg { width: 20px; height: 20px; }
+@media (min-width: 768px) and (hover: hover) {
+  .carousel__nav { display: inline-flex; }
 }
 
 /* Editorial photographic placeholder — folded textile vignette */
@@ -1428,4 +1583,161 @@ p { margin: 0 0 var(--space-2); }
   clip: rect(0,0,0,0);
   white-space: nowrap;
   border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   27. Mobile polish — fine-tuning across components for small screens
+   -------------------------------------------------------------------------- */
+
+/* Tighter nav on phones; FAB shouldn't crowd content */
+@media (max-width: 480px) {
+  :root { --nav-height: 64px; }
+  .nav__inner { gap: var(--space-1); }
+  .brand__wordmark { font-size: 17px; }
+  .brand__monogram { width: 32px; height: 32px; font-size: 13px; }
+}
+
+/* Tabs: scroll horizontally rather than wrap on very narrow screens */
+@media (max-width: 480px) {
+  .tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-left: calc(-1 * var(--gutter-mobile));
+    margin-right: calc(-1 * var(--gutter-mobile));
+    padding-left: var(--gutter-mobile);
+    padding-right: var(--gutter-mobile);
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { white-space: nowrap; flex: 0 0 auto; }
+}
+
+/* Pricing tables: collapse to readable two-line rows on phones */
+@media (max-width: 480px) {
+  .price-table th, .price-table td { padding: 14px 10px; font-size: 15px; }
+  .price-table .price { font-size: 16px; }
+  .price-table .item-meta { font-size: 12px; }
+}
+
+/* Hero buttons — full width pair on tiniest screens */
+@media (max-width: 380px) {
+  .hero__buttons { flex-direction: column; align-items: stretch; }
+  .hero__buttons .btn { width: 100%; }
+}
+
+/* Trust strip dots and items align center on phones */
+@media (max-width: 480px) {
+  .trust-strip { padding: var(--space-2) 0; }
+  .trust-strip__row { gap: 10px var(--space-2); }
+  .trust-strip__item { font-size: 13.5px; }
+}
+
+/* Section heads tighter on mobile */
+@media (max-width: 768px) {
+  .section-head { margin-bottom: var(--space-4); }
+}
+
+/* Testimonials: more compact padding on phones */
+@media (max-width: 480px) {
+  .testimonial { padding: var(--space-4) var(--space-3) var(--space-3); }
+  .testimonial__quote-mark { font-size: 72px; top: 4px; left: 12px; }
+  .testimonial__body { font-size: 15.5px; }
+}
+
+/* Snapshot card stacks cleanly on mobile */
+@media (max-width: 768px) {
+  .snapshot { padding: var(--space-3); }
+  .snapshot__price { font-size: 28px; }
+  .snapshot__item { padding: var(--space-2) 0; gap: 4px; }
+  .snapshot__item:first-child { padding-top: 0; }
+  .snapshot__item:last-child { border-bottom: 0; padding-bottom: 0; }
+}
+
+/* Service band heading tighter on mobile */
+@media (max-width: 480px) {
+  .service-band { padding: var(--space-6) 0; }
+  .service-band__title { font-size: 28px; }
+  .service-band__desc { font-size: 16px; }
+}
+
+/* Page hero compact on phones */
+@media (max-width: 480px) {
+  .page-hero { padding: var(--space-6) 0 var(--space-4); }
+  .page-hero__title { font-size: 36px; }
+  .page-hero__sub { font-size: 17px; }
+}
+
+/* Map: smaller aspect ratio on phones for less scroll */
+@media (max-width: 768px) {
+  .map { aspect-ratio: 4 / 3; }
+}
+
+/* Conversion band tighter on mobile */
+@media (max-width: 480px) {
+  .conversion { padding: var(--space-8) 0; }
+  .conversion h2 { font-size: 32px; }
+}
+
+/* Footer rhythm on mobile */
+@media (max-width: 768px) {
+  .footer { padding: var(--space-6) 0 var(--space-4); }
+  .footer__bottom { font-size: 12px; gap: 10px; flex-direction: column; align-items: flex-start; }
+}
+
+/* FAQ tap targets larger on mobile, headings smaller */
+@media (max-width: 480px) {
+  .faq__q { font-size: 18px; padding: 18px 0; gap: var(--space-2); }
+}
+
+/* Long-form (About) reads better on phones with smaller line-height */
+@media (max-width: 480px) {
+  .long-form { font-size: 17px; line-height: 1.65; }
+  .long-form .lead-quote { font-size: 22px; padding-left: var(--space-2); }
+}
+
+/* Steps stack with tighter spacing on phones */
+@media (max-width: 480px) {
+  .step__num { font-size: 48px; }
+  .steps { gap: var(--space-4); }
+}
+
+/* Contact block on phones */
+@media (max-width: 480px) {
+  .contact-block { padding: var(--space-3); }
+  .contact-block__value { font-size: 19px; }
+}
+
+/* Photo placeholders inside service bands look better with rounded corners on mobile */
+@media (max-width: 768px) {
+  .service-band__art { aspect-ratio: 16 / 11; border-radius: 8px; }
+}
+
+/* Industries grid: 2 columns on phones, larger tap targets */
+@media (max-width: 480px) {
+  .industries { gap: 8px; }
+  .industry { padding: var(--space-2); }
+  .industry__name { font-size: 15px; }
+}
+
+/* Hide horizontal scrollbars project-wide */
+html, body { overflow-x: clip; }
+
+/* Image-band photographic alternative — used where placeholders are replaced */
+.photo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.photo > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.92) brightness(0.97);
+}
+.photo > .photo-placeholder--label {
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
 }
