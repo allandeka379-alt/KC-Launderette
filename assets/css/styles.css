@@ -446,6 +446,9 @@ p { margin: 0 0 var(--space-2); }
 
 /* --------------------------------------------------------------------------
    7. Hero — full-bleed background photograph
+   The hero is pulled up under the sticky nav (negative margin) so the
+   photograph reads continuously from the top of the viewport. The nav
+   sits transparent over it, then turns solid cream once scrolled past.
    -------------------------------------------------------------------------- */
 .hero {
   position: relative;
@@ -454,14 +457,15 @@ p { margin: 0 0 var(--space-2); }
   color: var(--cream-paper);
   display: flex;
   align-items: flex-end;
-  min-height: 560px;
-  padding: var(--space-8) 0 var(--space-6);
+  min-height: 600px;
+  margin-top: calc(-1 * var(--nav-height));
+  padding: calc(var(--nav-height) + var(--space-8)) 0 var(--space-6);
 }
 @media (min-width: 768px) {
   .hero {
-    min-height: clamp(620px, 78vh, 820px);
+    min-height: clamp(640px, 80vh, 820px);
     align-items: center;
-    padding: var(--space-12) 0;
+    padding: calc(var(--nav-height) + var(--space-12)) 0 var(--space-12);
   }
 }
 
