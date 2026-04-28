@@ -96,4 +96,45 @@
   // --- Year in footer -----------------------------------------------------
   var yearEl = document.querySelector('[data-year]');
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+  // --- Hero headline phrase rotation -------------------------------------
+  // Sequenced fade: current phrase fades out, then the next one fades in,
+  // so they never visually overlap.
+  var phraseRoot = document.querySelector('[data-phrases]');
+  if (phraseRoot) {
+    var phrases = phraseRoot.querySelectorAll('.hero__phrase');
+    var phraseInterval = parseInt(phraseRoot.getAttribute('data-interval') || '4500', 10);
+    var fadeMs = 480;
+    var prefersReduce = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (phrases.length > 1 && !prefersReduce) {
+      var pi = 0;
+      window.setInterval(function () {
+        phrases[pi].classList.remove('is-active');
+        window.setTimeout(function () {
+          pi = (pi + 1) % phrases.length;
+          phrases[pi].classList.add('is-active');
+        }, fadeMs);
+      }, phraseInterval);
+    }
+  }
+
+  // --- Transparent-over-hero nav on the landing page ---------------------
+  var navEl = document.querySelector('.nav');
+  var heroEl = document.querySelector('.hero');
+  if (navEl && heroEl) {
+    var update = function () {
+      // Switch to solid nav once the hero is mostly scrolled out of view.
+      var threshold = heroEl.offsetHeight - navEl.offsetHeight - 8;
+      if (window.scrollY < threshold) {
+        navEl.classList.add('nav--over-hero');
+      } else {
+        navEl.classList.remove('nav--over-hero');
+      }
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+  }
 })();
