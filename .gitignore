@@ -1,0 +1,16 @@
+# Source spec — not part of the deployable site
+spec_unpacked/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Node / Vercel
+node_modules/
+.vercel
+
+# Local Claude Code settings
+.claude/
